@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Contact Qubit to discuss quantum-safe security, post-quantum cryptography, and advanced cybersecurity for your organization." />
+    <meta name="theme-color" content="#f7f8fc" />
+    <title>Contact — Qubit</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <div class="bg-animation">
+      <div class="grid-lines"></div>
+      <canvas id="particle-canvas" aria-hidden="true"></canvas>
+    </div>
+
+    <nav class="navbar">
+      <div class="nav-container">
+        <a class="nav-logo" href="index.html" aria-label="Qubit home">
+          <span class="logo-mark" aria-hidden="true"></span>
+          <span class="logo-text">Qubit</span>
+        </a>
+        <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation" aria-controls="navMenu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+        <ul class="nav-menu" id="navMenu">
+          <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="services.html">Services</a></li>
+          <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+          <li class="nav-item"><a class="nav-link" href="login.html">Login</a></li>
+          <li class="nav-item"><a class="nav-link nav-cta" href="services.html#consultation">Get Consultation</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <header class="page-hero">
+      <div class="container">
+        <div class="page-eyebrow"><span class="badge-dot"></span>Contact</div>
+        <h1>Let's talk about your <span class="gradient-text">security posture</span></h1>
+        <p>
+          Whether you are starting a post-quantum migration or exploring quantum networking,
+          our team is ready to help. Reach out and we'll respond within one business day.
+        </p>
+      </div>
+    </header>
+
+    <section class="section" style="padding-top: 24px">
+      <div class="container">
+        <div class="contact-layout">
+          <div class="contact-info">
+            <div class="contact-card reveal">
+              <div class="contact-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 7 8 6 8-6"/></svg>
+              </div>
+              <div>
+                <h3>Email</h3>
+                <a href="mailto:hello@qubit.io">hello@qubit.io</a>
+              </div>
+            </div>
+
+            <div class="contact-card reveal">
+              <div class="contact-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A15 15 0 0 1 3 6a2 2 0 0 1 2-2Z"/></svg>
+              </div>
+              <div>
+                <h3>Phone</h3>
+                <a href="tel:+15550123456">+1 (555) 012-3456</a>
+                <p>Mon–Fri, 9:00–18:00</p>
+              </div>
+            </div>
+
+            <div class="contact-card reveal">
+              <div class="contact-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-5.5 7-11a7 7 0 1 0-14 0c0 5.5 7 11 7 11Z"/><circle cx="12" cy="10" r="2.5"/></svg>
+              </div>
+              <div>
+                <h3>Office</h3>
+                <p>1 Quantum Park, Innovation District</p>
+              </div>
+            </div>
+
+            <div class="contact-card reveal">
+              <div class="contact-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+              </div>
+              <div>
+                <h3>Response time</h3>
+                <p>Within one business day</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="contact-form-card reveal">
+            <h2>Send us a message</h2>
+            <p>Fill in the form and we'll get back to you shortly.</p>
+            <form class="form-grid" data-form="contact" novalidate>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="name">Full name</label>
+                  <input id="name" name="name" type="text" placeholder="Jane Doe" required />
+                </div>
+                <div class="form-group">
+                  <label for="email">Work email</label>
+                  <input id="email" name="email" type="email" placeholder="jane@company.com" required />
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="company">Company</label>
+                  <input id="company" name="company" type="text" placeholder="Company name" />
+                </div>
+                <div class="form-group">
+                  <label for="topic">Topic</label>
+                  <select id="topic" name="topic">
+                    <option>Quantum Computing Consulting</option>
+                    <option>Post-Quantum Cryptography (PQC)</option>
+                    <option>Quantum-Safe Cloud Security</option>
+                    <option>Quantum Key Distribution (QKD) Consulting</option>
+                    <option>Hardware Security and Secure Chips</option>
+                    <option>Software Security and Cryptographic Protocols</option>
+                    <option>Hybrid Quantum-Classical Security</option>
+                    <option>AI-Powered Cybersecurity</option>
+                    <option>Enterprise and Government Security Solutions</option>
+                    <option>Quantum Technology Research and Development</option>
+                    <option>Partnership</option>
+                    <option>Other</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="message">Message</label>
+                <textarea id="message" name="message" placeholder="How can we help?" required></textarea>
+              </div>
+              <button class="btn btn-primary btn-block" type="submit">Send Message</button>
+              <p class="form-note">By submitting, you agree to be contacted about your inquiry.</p>
+              <div class="form-success" role="status">Thanks! Your message has been received. We'll be in touch soon.</div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" style="padding-top: 0">
+      <div class="container">
+        <div class="section-header reveal">
+          <div class="section-badge">FAQ</div>
+          <h2 class="section-title">Common questions</h2>
+        </div>
+        <div class="faq-grid">
+          <details class="faq-item reveal">
+            <summary>What is post-quantum cryptography?</summary>
+            <p>Post-quantum cryptography refers to algorithms designed to resist attacks from both classical and quantum computers. It is the practical path to protecting data today.</p>
+          </details>
+          <details class="faq-item reveal">
+            <summary>Why start migration now?</summary>
+            <p>Encrypted data captured today can be decrypted once quantum computers mature. Migrating early reduces long-term exposure and avoids costly last-minute changes.</p>
+          </details>
+          <details class="faq-item reveal">
+            <summary>Do you work with existing cloud providers?</summary>
+            <p>Yes. We design quantum-safe controls across AWS, Azure, Google Cloud, and hybrid environments without disrupting current operations.</p>
+          </details>
+          <details class="faq-item reveal">
+            <summary>How long does an assessment take?</summary>
+            <p>Most initial cryptographic risk assessments take two to four weeks depending on the size and complexity of your environment.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-section">
+            <div class="footer-logo">
+              <span class="logo-mark" aria-hidden="true"></span>
+              <span class="logo-text">Qubit</span>
+            </div>
+            <p class="footer-description">
+              Securing the quantum future with advanced cybersecurity and quantum-native security solutions.
+            </p>
+          </div>
+          <div class="footer-section">
+            <h4>Navigation</h4>
+            <ul class="footer-links">
+              <li><a href="index.html">Home</a></li>
+              <li><a href="services.html">Services</a></li>
+              <li><a href="contact.html">Contact</a></li>
+              <li><a href="login.html">Login</a></li>
+            </ul>
+          </div>
+          <div class="footer-section">
+            <h4>Contact Info</h4>
+            <ul class="footer-contact">
+              <li>1 Quantum Park, Innovation District</li>
+              <li><a href="tel:+15550123456">+1 (555) 012-3456</a></li>
+              <li><a href="mailto:hello@qubit.io">hello@qubit.io</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>&copy; <span id="year"></span> Qubit. All rights reserved.</p>
+          <p>Quantum-safe by design.</p>
+        </div>
+      </div>
+    </footer>
+
+    <script src="config/site.config.js"></script>
+    <script src="js/modules/nav.js"></script>
+    <script src="js/modules/footer.js"></script>
+    <script src="js/modules/reveal.js"></script>
+    <script src="js/modules/forms.js"></script>
+    <script src="js/modules/auth.js"></script>
+    <script src="js/modules/particles.js"></script>
+    <script src="js/main.js"></script>
+  </body>
+</html>

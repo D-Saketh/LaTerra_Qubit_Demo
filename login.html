@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Sign in to Qubit to manage your quantum-safe security assessments, migrations, and monitoring." />
+    <meta name="theme-color" content="#f7f8fc" />
+    <title>Login — Qubit</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <div class="bg-animation">
+      <div class="grid-lines"></div>
+      <canvas id="particle-canvas" aria-hidden="true"></canvas>
+    </div>
+
+    <nav class="navbar">
+      <div class="nav-container">
+        <a class="nav-logo" href="index.html" aria-label="Qubit home">
+          <span class="logo-mark" aria-hidden="true"></span>
+          <span class="logo-text">Qubit</span>
+        </a>
+        <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation" aria-controls="navMenu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+        <ul class="nav-menu" id="navMenu">
+          <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="services.html">Services</a></li>
+          <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+          <li class="nav-item"><a class="nav-link" href="login.html">Login</a></li>
+          <li class="nav-item"><a class="nav-link nav-cta" href="services.html#consultation">Get Consultation</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <main class="auth-section">
+      <div class="container">
+        <div class="auth-shell">
+          <aside class="auth-aside">
+            <div class="auth-aside-glow" aria-hidden="true"></div>
+            <a class="auth-brand" href="index.html">
+              <span class="logo-mark" aria-hidden="true"></span>
+              <span>Qubit</span>
+            </a>
+            <div class="auth-aside-body">
+              <h2>Secure access to your quantum-safe workspace.</h2>
+              <p>Sign in to review assessments, track migrations, and monitor your security posture.</p>
+              <ul class="auth-points">
+                <li><span class="check" aria-hidden="true">&#10003;</span><span>Post-quantum migration tracking</span></li>
+                <li><span class="check" aria-hidden="true">&#10003;</span><span>Live cryptographic risk insights</span></li>
+                <li><span class="check" aria-hidden="true">&#10003;</span><span>Encrypted, audit-ready reporting</span></li>
+              </ul>
+            </div>
+            <p class="auth-footnote">Protected by quantum-safe design principles.</p>
+          </aside>
+
+          <div class="auth-panel">
+            <div class="auth-head">
+              <div class="section-badge">Secure Access</div>
+              <h1>Sign in to Qubit</h1>
+              <p>Enter your work credentials to continue.</p>
+            </div>
+
+            <form class="form-grid" data-form="login" novalidate>
+              <div class="form-group">
+                <label for="login-email">Work email</label>
+                <input id="login-email" name="email" type="email" autocomplete="email" placeholder="jane@company.com" required />
+              </div>
+
+              <div class="form-group">
+                <label for="login-password">Password</label>
+                <div class="password-field">
+                  <input id="login-password" name="password" type="password" autocomplete="current-password" placeholder="Enter your password" required minlength="8" />
+                  <button class="password-toggle" id="togglePassword" type="button" aria-label="Show password" aria-pressed="false">Show</button>
+                </div>
+              </div>
+
+              <div class="auth-options">
+                <label class="checkbox">
+                  <input type="checkbox" name="remember" />
+                  <span>Remember me</span>
+                </label>
+                <a class="link" href="mailto:hello@qubit.io?subject=Password%20reset%20request">Forgot password?</a>
+              </div>
+
+              <button class="btn btn-primary btn-block" type="submit">Sign In</button>
+              <div class="form-success" role="status">
+                Demo sign-in successful. Connect an authentication backend to enable real access.
+              </div>
+            </form>
+
+            <div class="auth-divider"><span>New to Qubit?</span></div>
+            <p class="auth-alt">Request workspace access from our team. <a class="link" href="contact.html">Contact us</a></p>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-section">
+            <div class="footer-logo">
+              <span class="logo-mark" aria-hidden="true"></span>
+              <span class="logo-text">Qubit</span>
+            </div>
+            <p class="footer-description">
+              Securing the quantum future with advanced cybersecurity and quantum-native security solutions.
+            </p>
+          </div>
+          <div class="footer-section">
+            <h4>Navigation</h4>
+            <ul class="footer-links">
+              <li><a href="index.html">Home</a></li>
+              <li><a href="services.html">Services</a></li>
+              <li><a href="contact.html">Contact</a></li>
+              <li><a href="login.html">Login</a></li>
+            </ul>
+          </div>
+          <div class="footer-section">
+            <h4>Contact Info</h4>
+            <ul class="footer-contact">
+              <li>1 Quantum Park, Innovation District</li>
+              <li><a href="tel:+15550123456">+1 (555) 012-3456</a></li>
+              <li><a href="mailto:hello@qubit.io">hello@qubit.io</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>&copy; <span id="year"></span> Qubit. All rights reserved.</p>
+          <p>Quantum-safe by design.</p>
+        </div>
+      </div>
+    </footer>
+
+    <script src="config/site.config.js"></script>
+    <script src="js/modules/nav.js"></script>
+    <script src="js/modules/footer.js"></script>
+    <script src="js/modules/reveal.js"></script>
+    <script src="js/modules/forms.js"></script>
+    <script src="js/modules/auth.js"></script>
+    <script src="js/modules/particles.js"></script>
+    <script src="js/main.js"></script>
+  </body>
+</html>
