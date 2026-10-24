@@ -22,7 +22,6 @@ The project showcases emerging quantum technologies and cybersecurity solutions 
 - JavaScript
 - AI-generated or freely available technology-related imagery
 
-*The final technology stack should reflect the technologies actually used in the repository.*
 
 ## Project Structure
 
@@ -40,7 +39,6 @@ LaTerra_Qubit_Demo/
 └── README.md
 ```
 
-*Update this structure if your actual project uses different filenames or folders.*
 
 ## Getting Started
 
@@ -70,12 +68,6 @@ The website can be published for free using GitHub Pages:
 
 No custom domain or paid hosting is required.
 
-## Contact
-
-**Company:** Qubit  
-**Address:** [Insert Registered Office Address]  
-**Email:** [Insert Official Company Email]  
-**Phone:** [Insert Official Business Phone Number]
 
 ## Disclaimer
 
