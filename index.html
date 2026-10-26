@@ -41,9 +41,9 @@
         <div class="hero-content">
           <div class="hero-badge"><span class="badge-dot"></span>Quantum-Native Security Solutions</div>
           <h1 class="hero-title">
-            Quantum Computing, <span class="gradient-text">Quantum Security</span> &amp; Advanced Cybersecurity
+            <span data-site="hero.titleBefore">Quantum Computing, </span><span class="gradient-text" data-site="hero.titleHighlight">Quantum Security</span><span data-site="hero.titleAfter"> &amp; Advanced Cybersecurity</span>
           </h1>
-          <p class="hero-subtitle">
+          <p class="hero-subtitle" data-site="hero.subtitle">
             Engineering quantum-safe architectures for cloud, networks, hardware, and mission-critical systems.
           </p>
           <div class="hero-actions">
@@ -67,11 +67,11 @@
         <div class="section-header reveal">
           <div class="section-badge">Our Services</div>
           <h2 class="section-title">Pioneering the <span class="gradient-text">Quantum-Safe</span> Era</h2>
-          <p class="section-subtitle">
+          <p class="section-subtitle" data-site="services.subtitle">
             Ten end-to-end capabilities that protect today's systems while preparing your organization for tomorrow's threats.
           </p>
         </div>
-        <div class="services-grid">
+        <div class="services-grid" data-services-grid data-services-variant="summary">
           <article class="service-card reveal">
             <div class="service-icon" aria-hidden="true">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><ellipse cx="12" cy="12" rx="10" ry="4.5" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="10" ry="4.5" transform="rotate(-60 12 12)"/></svg>
@@ -178,7 +178,7 @@
               <span class="logo-mark" aria-hidden="true"></span>
               <span class="logo-text">Qubit</span>
             </div>
-            <p class="footer-description">
+            <p class="footer-description" data-site="footer.description">
               Securing the quantum future with advanced cybersecurity and quantum-native security solutions.
             </p>
           </div>
@@ -194,9 +194,9 @@
           <div class="footer-section">
             <h4>Contact Info</h4>
             <ul class="footer-contact">
-              <li>1 Quantum Park, Innovation District</li>
-              <li><a href="tel:+15550123456">+1 (555) 012-3456</a></li>
-              <li><a href="mailto:hello@qubit.io">hello@qubit.io</a></li>
+              <li data-site="contact.address">1 Quantum Park, Innovation District</li>
+              <li><a href="tel:+15550123456" data-site="contact.phone">+1 (555) 012-3456</a></li>
+              <li><a href="mailto:hello@qubit.io" data-site="contact.email">hello@qubit.io</a></li>
             </ul>
           </div>
         </div>
@@ -208,11 +208,14 @@
     </footer>
 
     <script src="config/site.config.js"></script>
+    <script src="js/firebase-config.js"></script>
+    <script type="module" src="js/firebase.js"></script>
     <script src="js/modules/nav.js"></script>
     <script src="js/modules/footer.js"></script>
     <script src="js/modules/reveal.js"></script>
     <script src="js/modules/forms.js"></script>
     <script src="js/modules/auth.js"></script>
+    <script src="js/modules/content.js"></script>
     <script src="js/modules/particles.js"></script>
     <script src="js/main.js"></script>
   </body>

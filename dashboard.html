@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Qubit admin dashboard: realtime contact messages, consultations, services, and site content." />
+    <meta name="theme-color" content="#f7f8fc" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Dashboard — Qubit</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/dashboard.css" />
+  </head>
+  <body>
+    <div class="bg-animation">
+      <div class="grid-lines"></div>
+      <canvas id="particle-canvas" aria-hidden="true"></canvas>
+    </div>
+
+    <nav class="navbar">
+      <div class="nav-container">
+        <a class="nav-logo" href="index.html" aria-label="Qubit home">
+          <span class="logo-mark" aria-hidden="true"></span>
+          <span class="logo-text">Qubit</span>
+        </a>
+        <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation" aria-controls="navMenu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+        <ul class="nav-menu" id="navMenu">
+          <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="services.html">Services</a></li>
+          <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+          <li class="nav-item"><a class="nav-link" href="dashboard.html">Dashboard</a></li>
+          <li class="nav-item"><button class="nav-link nav-cta" type="button" data-logout>Sign Out</button></li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="dash-loading" data-dash-loading>Checking access…</div>
+
+    <main class="section dash-section" data-dash-root hidden>
+      <div class="container">
+        <div class="dash-head">
+          <div>
+            <div class="section-badge">Admin</div>
+            <h1 class="section-title">Realtime dashboard</h1>
+            <p class="section-subtitle">
+              Live data from Firestore. Signed in as <strong data-auth-email>…</strong>
+            </p>
+          </div>
+          <div class="dash-head-actions">
+            <button class="btn btn-secondary" type="button" data-seed>Load default content</button>
+            <button class="btn btn-primary" type="button" data-logout>Sign Out</button>
+          </div>
+        </div>
+
+        <div class="dash-status" data-dash-status role="status"></div>
+
+        <div class="dash-setup" data-dash-setup hidden>
+          <strong>Firebase is not configured yet.</strong>
+          <p>
+            Fill in <code>js/firebase-config.js</code> with your Firebase web app values, then reload this page.
+            See <code>FIREBASE-UPGRADE-GUIDE.txt</code> for the full setup steps.
+          </p>
+        </div>
+
+        <div class="dash-stats" aria-label="Live totals">
+          <div class="dash-stat">
+            <span class="dash-stat-label">Contact messages</span>
+            <strong data-stat="messages">0</strong>
+          </div>
+          <div class="dash-stat">
+            <span class="dash-stat-label">New / unread</span>
+            <strong data-stat="new">0</strong>
+          </div>
+          <div class="dash-stat">
+            <span class="dash-stat-label">Consultations</span>
+            <strong data-stat="consultations">0</strong>
+          </div>
+          <div class="dash-stat">
+            <span class="dash-stat-label">Services</span>
+            <strong data-stat="services">0</strong>
+          </div>
+        </div>
+
+        <div class="dash-columns">
+          <section class="dash-card">
+            <div class="dash-card-head">
+              <div>
+                <h2>Contact messages</h2>
+                <p>Updates live as new submissions arrive.</p>
+              </div>
+              <span class="dash-live"><span class="dash-live-dot"></span>Realtime</span>
+            </div>
+            <div class="dash-list" data-list="messages">
+              <p class="dash-empty">Loading…</p>
+            </div>
+          </section>
+
+          <section class="dash-card">
+            <div class="dash-card-head">
+              <div>
+                <h2>Consultation requests</h2>
+                <p>Site-wide consultation form submissions.</p>
+              </div>
+              <span class="dash-live"><span class="dash-live-dot"></span>Realtime</span>
+            </div>
+            <div class="dash-list" data-list="consultations">
+              <p class="dash-empty">Loading…</p>
+            </div>
+          </section>
+        </div>
+
+        <div class="dash-columns dash-columns-wide">
+          <section class="dash-card">
+            <div class="dash-card-head">
+              <div>
+                <h2>Services</h2>
+                <p>These render on the home and services pages automatically.</p>
+              </div>
+              <span class="dash-live"><span class="dash-live-dot"></span>Realtime</span>
+            </div>
+
+            <form class="form-grid dash-form" data-service-form novalidate>
+              <input type="hidden" name="serviceId" value="" />
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="service-title">Title</label>
+                  <input id="service-title" name="title" type="text" placeholder="Quantum Computing Consulting" required />
+                </div>
+                <div class="form-group">
+                  <label for="service-icon">Icon</label>
+                  <select id="service-icon" name="icon">
+                    <option value="quantum">Quantum / atom</option>
+                    <option value="pqc">Lock / PQC</option>
+                    <option value="cloud">Cloud</option>
+                    <option value="qkd">Network / QKD</option>
+                    <option value="hardware">Chip / hardware</option>
+                    <option value="software">Code / software</option>
+                    <option value="hybrid">Hybrid</option>
+                    <option value="ai">AI / cyber</option>
+                    <option value="enterprise">Enterprise</option>
+                    <option value="research">Research</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="service-description">Description</label>
+                <textarea id="service-description" name="description" placeholder="Short description shown on the cards." required></textarea>
+              </div>
+              <div class="form-group">
+                <label for="service-bullets">Detail bullets (one per line, services page only)</label>
+                <textarea id="service-bullets" name="bullets" placeholder="Readiness assessments and roadmaps&#10;Quantum algorithm design"></textarea>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="service-order">Order</label>
+                  <input id="service-order" name="order" type="number" min="0" step="1" value="1" required />
+                </div>
+                <div class="form-group">
+                  <label>Visibility</label>
+                  <label class="checkbox dash-checkbox">
+                    <input type="checkbox" name="active" checked />
+                    <span>Active (visible on the website)</span>
+                  </label>
+                </div>
+              </div>
+              <div class="dash-form-actions">
+                <button class="btn btn-primary" type="submit">Add service</button>
+                <button class="btn btn-secondary" type="button" data-cancel-edit hidden>Cancel edit</button>
+              </div>
+            </form>
+
+            <div class="dash-list dash-list-compact" data-list="services">
+              <p class="dash-empty">Loading…</p>
+            </div>
+          </section>
+
+          <section class="dash-card">
+            <div class="dash-card-head">
+              <div>
+                <h2>Site content</h2>
+                <p>Saved values appear on public pages without a redeploy.</p>
+              </div>
+            </div>
+
+            <form class="form-grid dash-form" data-site-form novalidate>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="site-title-before">Hero title (before highlight)</label>
+                  <input id="site-title-before" name="heroTitleBefore" type="text" />
+                </div>
+                <div class="form-group">
+                  <label for="site-title-highlight">Hero highlight</label>
+                  <input id="site-title-highlight" name="heroTitleHighlight" type="text" />
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="site-title-after">Hero title (after highlight)</label>
+                <input id="site-title-after" name="heroTitleAfter" type="text" />
+              </div>
+              <div class="form-group">
+                <label for="site-hero-subtitle">Hero subtitle</label>
+                <textarea id="site-hero-subtitle" name="heroSubtitle"></textarea>
+              </div>
+              <div class="form-group">
+                <label for="site-services-subtitle">Home services subtitle</label>
+                <textarea id="site-services-subtitle" name="servicesSubtitle"></textarea>
+              </div>
+              <div class="form-group">
+                <label for="site-footer-description">Footer description</label>
+                <textarea id="site-footer-description" name="footerDescription"></textarea>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="site-email">Contact email</label>
+                  <input id="site-email" name="contactEmail" type="email" />
+                </div>
+                <div class="form-group">
+                  <label for="site-phone">Contact phone</label>
+                  <input id="site-phone" name="contactPhone" type="text" />
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="site-address">Office address</label>
+                <input id="site-address" name="contactAddress" type="text" />
+              </div>
+              <button class="btn btn-primary btn-block" type="submit">Save content</button>
+            </form>
+          </section>
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-section">
+            <div class="footer-logo">
+              <span class="logo-mark" aria-hidden="true"></span>
+              <span class="logo-text">Qubit</span>
+            </div>
+            <p class="footer-description">
+              Securing the quantum future with advanced cybersecurity and quantum-native security solutions.
+            </p>
+          </div>
+          <div class="footer-section">
+            <h4>Navigation</h4>
+            <ul class="footer-links">
+              <li><a href="index.html">Home</a></li>
+              <li><a href="services.html">Services</a></li>
+              <li><a href="contact.html">Contact</a></li>
+              <li><a href="login.html">Login</a></li>
+            </ul>
+          </div>
+          <div class="footer-section">
+            <h4>Contact Info</h4>
+            <ul class="footer-contact">
+              <li>1 Quantum Park, Innovation District</li>
+              <li><a href="tel:+15550123456">+1 (555) 012-3456</a></li>
+              <li><a href="mailto:hello@qubit.io">hello@qubit.io</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>&copy; <span id="year"></span> Qubit. All rights reserved.</p>
+          <p>Quantum-safe by design.</p>
+        </div>
+      </div>
+    </footer>
+
+    <script src="js/firebase-config.js"></script>
+    <script type="module" src="js/firebase.js"></script>
+    <script src="js/default-content.js"></script>
+    <script src="js/modules/nav.js"></script>
+    <script src="js/modules/footer.js"></script>
+    <script src="js/modules/reveal.js"></script>
+    <script src="js/modules/auth.js"></script>
+    <script src="js/modules/particles.js"></script>
+    <script src="js/modules/dashboard.js"></script>
+    <script src="js/main.js"></script>
+  </body>
+</html>

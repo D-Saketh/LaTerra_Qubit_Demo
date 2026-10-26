@@ -1,0 +1,565 @@
+QUBIT WEBSITE - FIREBASE UPGRADE GUIDE
+======================================
+
+Status of the code: COMPLETE.
+Status of the Firebase project: NOT CREATED YET - this is the part you do.
+Until you add your Firebase values, the site still looks and works as a normal
+static site. Forms will show a clear "database is not connected yet" message
+instead of pretending to send.
+
+This file explains:
+  - what the website was before
+  - what changed
+  - what Firebase is used for
+  - exactly what you need to create and click
+  - how to test and deploy
+  - how to use the dashboard
+  - common errors and how to fix them
+
+
+----------------------------------------------------------------------
+1. SHORT VERSION - WHAT YOU NEED TO DO (about 10-15 minutes)
+----------------------------------------------------------------------
+
+  1. Create a Firebase project at https://console.firebase.google.com
+  2. Create a Firestore database in that project.
+  3. Enable Email/Password sign-in.
+  4. Register a Web App and copy its config values.
+  5. Paste those values into: js/firebase-config.js
+  6. Publish firestore.rules in the Firebase console.
+  7. Create your admin user in Firebase Authentication.
+  8. Run the site locally, sign in, click "Load default content".
+  9. Deploy with the Firebase CLI.
+
+Details for every step are in section 6 below.
+
+
+----------------------------------------------------------------------
+2. WHAT THE WEBSITE WAS BEFORE
+----------------------------------------------------------------------
+
+Before this upgrade, Qubit was a static website:
+
+  - HTML, CSS and JavaScript files only.
+  - No server and no database.
+  - The contact form checked the fields, waited 0.55 seconds, then showed
+    "Thanks!" and threw the data away.
+  - The login form only toggled "Show/Hide" on the password. It did not
+    verify anything.
+  - Service cards, hero text, phone, email and address were typed directly
+    into the HTML files.
+  - data/site.json and data/services.json existed but were empty and unused.
+  - GitHub Pages could host the files, but GitHub Pages only serves static
+    files. It cannot store form submissions or run login logic.
+
+That is why GitHub Pages alone can never be a real-time database.
+
+
+----------------------------------------------------------------------
+3. WHAT FIREBASE DOES FOR THIS WEBSITE
+----------------------------------------------------------------------
+
+Firebase is a backend service. Your design does not change. Firebase adds:
+
+  A. Firestore (database)
+     A real server-side database that stores data and pushes updates to
+     open browser tabs instantly. This is the "real-time" part.
+
+  B. Authentication
+     Real email/password login. Wrong passwords fail. Sessions survive a
+     refresh. Only a signed-in admin can open the dashboard.
+
+  C. Hosting
+     A free place to deploy the website. One command publishes the site.
+
+  D. Security Rules
+     Server-side rules that decide who may read or write each collection.
+     The rules run on Google's servers, not in the browser, so users cannot
+     bypass them.
+
+The Firebase web config (apiKey, projectId, etc.) is NOT a secret. It is
+meant to be visible in the browser. Real protection comes from the Security
+Rules. Never put a Firebase service-account JSON file in this project.
+
+
+----------------------------------------------------------------------
+4. BEFORE vs AFTER
+----------------------------------------------------------------------
+
+  Contact form
+    Before: fake success, data lost.
+    After:  saved in Firestore "contactMessages", visible in the dashboard.
+
+  Consultation form
+    Before: fake success, data lost.
+    After:  saved in Firestore "consultations", visible in the dashboard.
+
+  Login
+    Before: UI only, any password worked.
+    After:  real Firebase account, real errors, logout, session persistence.
+
+  Messages and requests
+    Before: did not exist anywhere.
+    After:  stored in the database, appear live in the dashboard, can be
+            marked new / read / replied or new / contacted / closed, and
+            can be deleted.
+
+  Services and site text
+    Before: hardcoded in HTML. Any change needed a code edit and redeploy.
+    After:  stored in Firestore. Edit once in the dashboard and public pages
+            update live, with no redeploy.
+
+  Data files
+    Before: data/site.json and data/services.json were empty and unused.
+    After:  Firestore collections replace them. The old files can be deleted.
+
+  Hosting
+    Before: GitHub Pages, static only.
+    After:  Firebase Hosting (free Spark plan), or GitHub Pages can still
+            serve the frontend while Firebase stores the data.
+
+  Security
+    Before: not applicable.
+    After:  Firestore Rules + admin-only dashboard.
+
+
+----------------------------------------------------------------------
+5. WHAT WAS IMPLEMENTED (file by file)
+----------------------------------------------------------------------
+
+NEW FILES
+  js/firebase-config.js
+      Your Firebase web app values go here. Currently placeholders.
+
+  js/firebase.js
+      Loads the Firebase SDK from the official CDN and starts Firestore and
+      Auth. Makes the ready-made API available to the other scripts through
+      window.QubitFirebaseReady. No build step and no npm install required.
+
+  js/modules/content.js
+      Reads the "site/main" document and the "services" collection from
+      Firestore and updates the public pages live. If the database is empty
+      or not configured, the existing hardcoded HTML stays as a fallback.
+
+  js/modules/dashboard.js
+      The admin dashboard logic: real-time lists, status changes, delete,
+      add/edit services, edit site content, and seed default content.
+
+  js/default-content.js
+      The current site text and all 10 services in database format, used by
+      the "Load default content" button so you do not have to retype them.
+
+  dashboard.html
+      The admin page. Same visual design as the rest of the site.
+
+  css/dashboard.css
+      Dashboard-only styling, built from the existing colours and variables.
+
+  firestore.rules
+      Server-side security rules.
+
+  firebase.json
+      Firebase Hosting + Firestore rules deployment config.
+
+  .firebaserc
+      Holds the Firebase project id for the CLI. It is already set to
+      "laterra-assessment" to match js/firebase-config.js.
+
+CHANGED FILES
+  js/modules/forms.js
+      Replaced the fake setTimeout success with real Firestore writes,
+      real error messages, a loading state, and a "not connected" message.
+
+  js/modules/auth.js
+      Added real Firebase sign-in, error messages, logout, remember-me
+      persistence, and automatic redirect when already signed in.
+
+  js/modules/reveal.js
+      Added a refresh() function so newly rendered service cards still get
+      the existing scroll animation.
+
+  js/main.js
+      Initializes the new content and dashboard modules.
+
+  index.html / services.html / contact.html / login.html
+      Added the Firebase scripts, data hook attributes, and live content
+      placeholders. Design, layout and CSS are unchanged.
+
+  css/style.css
+      Added .form-error styles only.
+
+UNCHANGED ON PURPOSE
+  All existing layout, colours, navigation, animations, particles, footer,
+  form validation, mobile menu and copy are preserved.
+
+  js/app.js is an older duplicate that the pages do not load. It can be
+  deleted safely, but it was left alone to avoid touching unrelated code.
+
+
+----------------------------------------------------------------------
+6. YOUR SETUP STEPS (do these in order)
+----------------------------------------------------------------------
+
+STEP A - Create the Firebase project
+  1. Open https://console.firebase.google.com
+  2. Sign in with your Google account.
+  3. Click "Create a project" (or "Add project").
+  4. Enter a project name, for example: qubit-website
+  5. Google Analytics is optional. You can turn it off. Click Continue.
+  6. Click "Create project" and wait for it to finish.
+  7. Click Continue when it is ready.
+
+STEP B - Create the Firestore database
+  1. In the left sidebar, click "Build" then "Firestore Database".
+  2. Click "Create database".
+  3. Choose a location close to your users. This cannot be changed later
+     without recreating the database, so pick carefully.
+  4. Choose "Production mode" (do not use test mode).
+  5. Click Create.
+  6. You will see an empty database with a "Rules" tab. You will add the
+     rules in Step F.
+
+STEP C - Enable Email/Password login
+  1. Left sidebar: "Build" then "Authentication".
+  2. Click "Get started".
+  3. Open the "Sign-in method" tab.
+  4. Click "Email/Password".
+  5. Turn on "Enable".
+  6. Leave "Email link (passwordless sign-in)" off.
+  7. Click Save.
+
+STEP D - Register the web app and copy the config
+  1. Click the gear icon near the top left, then "Project settings".
+  2. Scroll to "Your apps".
+  3. Click the web icon "</>" (it means "Web app").
+  4. App nickname: Qubit Website
+  5. Do NOT enable Firebase Hosting here. You will deploy later.
+  6. Click "Register app".
+  7. Firebase shows a block like this:
+
+       const firebaseConfig = {
+         apiKey: "AIza...",
+         authDomain: "qubit-website.firebaseapp.com",
+         projectId: "qubit-website",
+         storageBucket: "qubit-website.appspot.com",
+         messagingSenderId: "1234567890",
+         appId: "1:1234567890:web:abcdef"
+       };
+
+  8. Keep this browser tab open. You need these values next.
+
+STEP E - Paste the config into the project
+  1. Open this file in your editor: js/firebase-config.js
+  2. Replace every placeholder so it looks like this (use YOUR values):
+
+       window.QUBIT_FIREBASE_CONFIG = {
+         apiKey: "AIza...",
+         authDomain: "qubit-website.firebaseapp.com",
+         projectId: "qubit-website",
+         storageBucket: "qubit-website.appspot.com",
+         messagingSenderId: "1234567890",
+         appId: "1:1234567890:web:abcdef"
+       };
+
+  3. Save the file.
+  4. Important: do not rename the keys. Do not wrap the values in extra
+     quotes. The values must match Firebase exactly.
+
+STEP F - Publish the security rules
+  Option 1, from the Firebase console (easy):
+    1. Firestore Database -> Rules tab.
+    2. Delete what is there.
+    3. Copy the entire contents of firestore.rules from this project.
+    4. Paste it into the editor.
+    5. Click "Publish".
+    6. The rules allow:
+         - anyone to read site content and services
+         - anyone to submit the contact and consultation forms
+         - only signed-in admins to read messages or edit content
+
+  Option 2, from the CLI (used in Step J):
+    firebase deploy --only firestore:rules
+
+STEP G - Create your admin account
+  There is deliberately no public sign-up page. Create the account yourself.
+    1. Authentication -> Users tab.
+    2. Click "Add user".
+    3. Enter your admin email and a password of 8 or more characters.
+    4. Click Add user.
+    5. That email and password now work on login.html.
+  To add another admin later, repeat this. Any signed-in user currently has
+  admin access (see section 12 for future role improvements).
+
+STEP H - Run the website locally
+  Do not double-click the HTML files. ES modules do not work from file://.
+  From the project folder run:
+
+      python3 -m http.server 8080
+
+  Then open:
+      http://localhost:8080
+
+  localhost is already an authorized domain in Firebase by default.
+
+  Test in this order:
+    1. Open contact.html, submit a message. You should see the real success
+       message, not a fake one.
+    2. Open the Firebase console -> Firestore Database -> contactMessages.
+       The new document should be there.
+    3. Open login.html and sign in with the admin account from Step G.
+       You should be redirected to dashboard.html.
+    4. On the dashboard, click "Load default content". This writes the site
+       text and the 10 services into Firestore.
+    5. Open index.html and services.html in another tab. The cards now come
+       from the database.
+    6. Keep the dashboard open. Submit another contact message in another
+       tab. The new message appears in the dashboard without refreshing.
+    7. Change some site text in the dashboard, save, and watch the public
+       page update live.
+
+STEP I - Check the real-time behaviour
+  Real-time means the browser keeps a live connection to Firestore.
+  - New form submissions appear immediately in the dashboard.
+  - Status changes made in the dashboard are stored on the server.
+  - Site text and services edited in the dashboard update public pages.
+  - If you change a document directly in the Firebase console, the open
+    page updates too.
+
+STEP J - Deploy to free hosting
+  Firebase Hosting has a free Spark plan. From the project folder:
+
+    1. Install the Firebase CLI (once):
+         npm install -g firebase-tools
+
+       If you do not have Node.js, install it from https://nodejs.org first.
+
+    2. Sign in (once):
+         firebase login
+
+    3. Confirm this folder points at your project:
+         firebase use
+
+       It should say "laterra-assessment". If not, run:
+         firebase use --add
+       and choose the project. This fills .firebaserc automatically.
+
+    4. Deploy:
+         firebase deploy
+
+       This publishes the website and the Firestore rules.
+       If you only want the website:
+         firebase deploy --only hosting
+       If you only want the rules:
+         firebase deploy --only firestore:rules
+
+    5. Firebase prints a URL such as:
+         https://qubit-website.web.app
+       Open it and repeat the checks from Step H.
+
+  To deploy again after editing files, run "firebase deploy" again.
+
+
+----------------------------------------------------------------------
+7. HOW TO USE THE DASHBOARD
+----------------------------------------------------------------------
+
+Open dashboard.html after signing in at login.html.
+
+  Contact messages
+    - Every contact form submission appears here live.
+    - Change the status to new / read / replied.
+    - Click Delete to remove an entry permanently.
+
+  Consultation requests
+    - Every consultation form submission appears here live.
+    - Change the status to new / contacted / closed.
+    - Delete removes an entry.
+
+  Services
+    - "Load default content" writes the 10 current services plus site text.
+    - Add a service: fill Title, Icon, Description, optional detail bullets,
+      Order, Active, then click "Add service".
+    - Order controls the position on the page (1 comes first).
+    - Deactivate hides a service from the public website without deleting it.
+    - Edit fills the form with that service; click "Update service" to save.
+    - Detail bullets appear on the services page only, one per line.
+
+  Site content
+    - Hero title is split into three fields:
+        before the highlight, the highlighted text, after the highlight.
+      Example:
+        "Quantum Computing, " + "Quantum Security" + " & Advanced Cybersecurity"
+      Keep the spaces in the first and last field, otherwise the words will
+      run together.
+    - Hero subtitle, services subtitle and footer description are plain text.
+    - Contact email, phone and address update the footer and the contact
+      page automatically.
+    - Click "Save content". Public pages update live.
+
+
+----------------------------------------------------------------------
+8. HOW THE DATA IS STORED
+----------------------------------------------------------------------
+
+Firestore is organised as collections and documents:
+
+  site/main
+    heroTitleBefore, heroTitleHighlight, heroTitleAfter,
+    heroSubtitle, servicesSubtitle, footerDescription,
+    contactEmail, contactPhone, contactAddress, updatedAt
+
+  services/{serviceId}
+    title, description, icon, order, active, bullets (array), updatedAt
+
+  contactMessages/{messageId}
+    name, email, company, topic, message, status, createdAt
+
+  consultations/{requestId}
+    name, email, company, interest, message, status, createdAt
+
+Icon values used by the site:
+  quantum, pqc, cloud, qkd, hardware, software, hybrid, ai, enterprise, research
+
+You do not need to create these by hand. The forms create submissions and
+the dashboard's "Load default content" button creates the site document and
+the services.
+
+
+----------------------------------------------------------------------
+9. FREE PLAN NOTES
+----------------------------------------------------------------------
+
+  - Firestore, Authentication and Hosting all have free tiers on the Spark
+    plan. For a small company website this is normally enough.
+  - Firestore free usage is counted per day (reads, writes, deletes) and has
+    a small storage allowance. Check the current limits in the Firebase
+    pricing page because Google updates them from time to time.
+  - If you exceed a daily free quota, writes or reads may be paused until
+    the quota resets.
+  - The Spark plan cannot run Cloud Functions. That means the site does not
+    automatically send emails when a form is submitted. You read submissions
+    in the dashboard. If you need automatic email notifications later, you
+    will need the Blaze (pay-as-you-go) plan plus a Cloud Function and an
+    email provider.
+  - Hosting on the Spark plan includes a free web.app / firebaseapp.com URL
+    and a limited amount of monthly transfer. A custom domain is supported.
+
+
+----------------------------------------------------------------------
+10. SECURITY NOTES
+----------------------------------------------------------------------
+
+  - The Firebase web config is public. That is normal and expected.
+  - Never paste a service-account JSON key into the website or commit it to
+    git. It grants full admin access to the project.
+  - The dashboard is protected in two layers:
+      1. The page redirects to login if there is no signed-in user.
+      2. Firestore rules reject reads and writes without authentication.
+    The second layer is the real protection. The redirect is only UX.
+  - The public can create documents in contactMessages and consultations,
+    but nobody can read them without signing in.
+  - Optional hardening later:
+      - Enable App Check with reCAPTCHA v3 to reduce form spam.
+      - Restrict the browser API key by HTTP referrer in Google Cloud Console
+        (APIs & Services -> Credentials -> your browser key).
+      - Add Firebase Authentication email verification if needed.
+  - Do not enable public sign-up unless you also add roles. Right now every
+    signed-in account is an admin.
+
+
+----------------------------------------------------------------------
+11. TROUBLESHOOTING
+----------------------------------------------------------------------
+
+  "The database is not connected yet"
+    You have not replaced the placeholders in js/firebase-config.js, or the
+    page is cached. Check the file, save, and hard-refresh (Cmd+Shift+R).
+
+  Dashboard shows "Firebase is not configured yet"
+    Same cause: fill in js/firebase-config.js.
+
+  "auth/operation-not-allowed"
+    Email/Password sign-in is not enabled. Repeat Step C.
+
+  "auth/invalid-api-key" or a config error in the console
+    A copied value is wrong or has extra spaces. Copy the config again.
+
+  "permission-denied"
+    Rules were not published, or you are not signed in, or a submission is
+    missing name / email / message. Publish firestore.rules (Step F) and
+    sign in again.
+
+  Login works but the dashboard redirects straight back to login
+    The browser blocked storage or the session expired. Allow cookies and
+    site data for the domain, then sign in again.
+
+  Nothing appears after "Load default content"
+    You must be signed in as an admin, and the rules must be published.
+    Also check the browser console for errors.
+
+  Services stay hardcoded even after seeding
+    The public page needs a refresh if it was already open before seeding.
+    After that, later changes are live. Also confirm every seeded service
+    has an order value (the defaults do).
+
+  The site works locally but not after deploy
+    - Deploy the updated js/firebase-config.js.
+    - If you use a custom domain, add it to
+      Authentication -> Settings -> Authorized domains.
+    - Open the browser console on the deployed site for exact errors.
+
+  "firebase: command not found"
+    Install the CLI with "npm install -g firebase-tools", or run commands
+    with "npx firebase-tools ...".
+
+  "Could not find a project"
+    Run "firebase use --add" from the project folder, or fix .firebaserc.
+
+  Forms fail only on GitHub Pages / another host
+    Add that host to Authentication -> Settings -> Authorized domains.
+    The database itself is Firebase, so the frontend host does not matter.
+
+  ES module / import error on file://
+    Serve the folder over HTTP. Example: python3 -m http.server 8080
+
+
+----------------------------------------------------------------------
+12. WHAT IS NOT IMPLEMENTED YET
+----------------------------------------------------------------------
+
+  - Automatic email notifications for new messages (needs Cloud Functions).
+  - A real "Forgot password" flow. The link still opens a mailto: address.
+    A future version can call Firebase sendPasswordResetEmail.
+  - Public user registration. Admin accounts are created manually.
+  - Roles and permissions. Every signed-in user is currently an admin.
+  - File or image uploads (Firebase Storage is not connected).
+  - Pagination or search in the dashboard. It loads all entries and scrolls.
+  - App Check / reCAPTCHA anti-spam.
+  - Multi-language content management.
+
+These are all possible later without changing the current design.
+
+
+----------------------------------------------------------------------
+13. RECOMMENDED NEXT STEPS
+----------------------------------------------------------------------
+
+  1. Follow Steps A-J once.
+  2. Change the admin password from the one you typed during setup.
+     (Authentication -> Users -> select user -> Reset password.)
+  3. Replace the placeholder company phone, email and address in the
+     dashboard so they match your real details.
+  4. Keep the Firebase console open while testing so you can watch documents
+     appear in real time.
+  5. When you are comfortable, consider App Check and role-based admin
+     accounts.
+  6. Commit the project files to git. The web config is safe to commit; a
+     service-account key is not.
+
+Files you can delete later if you want a cleaner project:
+  - js/app.js            (old unused duplicate)
+  - data/site.json       (empty, unused)
+  - data/services.json   (empty, unused)
+  - config/site.config.js is still harmless; the new modules do not require it.
+
+END OF GUIDE
